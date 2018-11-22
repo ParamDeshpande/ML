@@ -5,23 +5,63 @@ Created on Thu Nov 22 15:29:44 2018
 @author: Param
 
 """
-from scipy.spatial import distance
-def euc(a,b):
-    return distance.euclidean(a,b)
+#here k is the no of nearest neighbours 
 
-class ScrappyKNN():
-    def fit(self, X_train, Y_train):
-        #features and labels
-        self.X_train = X_train
-        self.Y_train = Y_train
+
+#in this case we have assumed it to be 1 if there is a tie randomly picks it
+
+
+
+
+
+from scipy.spatial import distance #imported the damn library
+def euc(a,b):       #defiend a function 
+    return distance.euclidean(a,b) #pythagoras theorem for 2d ,3d, 4d(this case), .....
+    #distance of test feature from my = sqrt()
+
+#construction model for defining classify function
     
-    def predict(self, X_test):
-        prediction = []
-        for row in X_test:
-            label = self.closest(row)
-            prediction.append(label)
-        return prediction 
+#def classify(features)
+    #do some logic
+    #return label
     
+#import random
+class ScrappyKNN():         #edeined a class for classifier (k)nearest neighbors
+    def fit(self, X_train, Y_train):        #defining find patterns in data
+        #features(x) and labels(y)
+        self.X_train = X_train              #  :-(
+        self.Y_train = Y_train              # dont know what 'self' does
+    
+    def predict(self, X_test):          #output of the classfier
+        predictions = []                 #empty array for inputs of data
+        
+        for row in X_test:              # 
+           label = self.closest(row)
+          # label = random.choice(self.Y_train) 
+           predictions.append(label)
+        return predictions 
+
+#here we are taking our test row and finding the distance from each row of training set
+#ie dist0 = sqrt((test[1]-train0[1])^2 +(test[2]-train0[2])^2+(test[3]-train0[3])^2+(test[4]-train0[4])^2)
+           
+#dist1 = sqrt((test[1]-train1[1])^2 +(test[2]-train1[2])^2+(test[3]-train1[3])^2+(test[4]-train1[4])^2)
+
+#dist2 = sqrt((test[1]-train2[1])^2 +(test[2]-train2[2])^2+(test[3]-train2[3])^2+(test[4]-train2[4])^2)
+
+#.................
+
+#.................
+
+#.................
+
+#.................
+
+#.................
+           
+#all these distances are compared and the index(srno) for which we have minimum distance is our optimum soln
+#we print the prediction corresponing to that label value(of the training)
+    
+
     def closest(self,row):
         best_dist = euc(row, self.X_train[0])
         best_index = 0
@@ -30,17 +70,19 @@ class ScrappyKNN():
             if dist <best_dist:
                 best_dist = dist
                 best_index = i
-            return self.Y_train[best_index]
+        return self.Y_train[best_index]
             
+        
+        
 from sklearn import datasets
 iris = datasets.load_iris()
 
-X = iris.data#this is my parameters
-Y = iris.target#thsese are my outputs
+X = iris.data#these are my features [[...],[...],[...],[...],[...],[...]..........]
+Y = iris.target#these are my labels[0,1,2,0,0,1,1,2,2................]
 
 from sklearn.cross_validation import train_test_split
-"50% of my data is being trained"
-X_train, X_test, Y_train ,Y_test = train_test_split(X, Y, test_size= .5)
+"50% of my data is being trained and tested on the other 50%"
+X_train, X_test, Y_train ,Y_test = train_test_split(X, Y, test_size= .5)#does it split randomly?
 
 #from sklearn import tree
 #my_classifier = tree.DecisionTreeClassifier()
@@ -49,9 +91,11 @@ X_train, X_test, Y_train ,Y_test = train_test_split(X, Y, test_size= .5)
 
 my_classifier = ScrappyKNN()
 
-my_classifier.fit(X_train,Y_train)
-prediction = my_classifier.predict(X_test)
+my_classifier.fit(X_train,Y_train)  #finding patterns in data
+prediction = my_classifier.predict(X_test)#giving the op of classfier
+print ("these are the 75 random/trained labels")
 print (prediction)
 
 from sklearn.metrics import accuracy_score
+print ("The accuracy of the predicted value")
 print (accuracy_score(Y_test, prediction))
